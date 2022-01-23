@@ -1,0 +1,55 @@
+.cocktailList-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.form-container {
+    display: block;
+}
+.filters-container {
+    display: inline-flex;
+    width: 100%;
+}
+
+.mat-card {
+    position: relative;
+    display: inline-block;
+    margin: 15px;
+    margin-bottom: 30px;
+    max-width: 300px;
+    padding-bottom: 0%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    transition: all 0.3s ease-in-out;
+}
+
+.mat-card:hover {
+    transform: scale(1.025, 1.025);
+}
+
+.mat-card:hover::after {
+    opacity: 1;
+}
+
+.icon-container {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    margin-bottom: 15px;
+}
+
+.icon-display {
+    transform: scale(1.5);
+    margin-left: auto;
+}
+
+.filter-field {
+    margin-right: 30px;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: inline-block;
+}

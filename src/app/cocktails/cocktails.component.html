@@ -1,1 +1,45 @@
-<p>cocktails works!</p>
+<div class="form-container">
+    <form class="search-form">
+        <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input type="text" matInput [formControl]="cocktailSearch" placeholder="Find New Cocktails!">
+        </mat-form-field>
+        <button type="button" (click)="submit()" mat-button>Submit</button>
+    </form>
+
+    <div class="filters-container">
+        <button id="alphabetical-sort" class="filter-field" type="button" mat-raised-button
+            (click)="sortAlphabetically()">
+            A-Z
+        </button>
+        <mat-form-field class="filter-field">
+            <mat-label>Filter</mat-label>
+            <input type="text" matInput [(ngModel)]="cocktailFilter">
+        </mat-form-field>
+    </div>
+</div>
+<div>
+</div>
+<div class="cocktailList-container">
+    <div id="{{drink.idDrink}}" class="card-wrapper" *ngFor="let drink of cocktailList" color="primary"
+        (click)="cardClicked(drink.idDrink)">
+        <mat-card
+            [ngStyle]="{'display': (drink.strDrink.toLowerCase().includes(cocktailFilter.toLowerCase())) ? 'inline-block' : 'none'}">
+            <mat-card-header>
+                <mat-card-title>{{drink.strDrink}}</mat-card-title>
+                <mat-card-subtitle>Id: {{drink.idDrink}}</mat-card-subtitle>
+                <mat-icon *ngIf="drink.idDrink !== selectedDrinkId" class="icon-display">add_circle_outline</mat-icon>
+                <mat-icon *ngIf="drink.idDrink === selectedDrinkId" class="icon-display">remove_circle_outline
+                </mat-icon>
+            </mat-card-header>
+            <img mat-card-image src="{{drink.strDrinkThumb}}" alt="Photo of the Cocktail">
+            <mat-card-content>
+                <div *ngIf="drink.idDrink === selectedDrinkId" class="instructions-container">
+                    <p>
+                        {{drink.strInstructions}}
+                    </p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
