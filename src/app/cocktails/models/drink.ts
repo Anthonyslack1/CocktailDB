@@ -1,8 +1,33 @@
 export class DrinkDTO {
-    drinks: Drink[] = [];
+    drinks: DrinkAPIObj[] = [];
 }
 
+
 export class Drink {
+    Id: string = "";
+    Name: string = "";
+    NameAlt: string = "";
+    Tags: string[] = [];
+    Video: string = "";
+    Category: string = "";
+    IBA: string = "";
+    Alcoholic: boolean = true;
+    Glass: string = "";
+    InstructionsEN: string = "";
+    InstructionsES: string = "";
+    InstructionsDE: string = "";
+    InstructionsFR: string = "";
+    InstructionsIT: string = "";
+    DrinkThumbnail: string = "";
+    Ingredients: string[] = [];
+    Measurements: string[] = [];
+    ImageSource: string = "";
+    ImageAttribution: string = "";
+    CreativeCommonsConfirmed: boolean = false;
+    DateModified: string = "";
+}
+
+export class DrinkAPIObj {
     idDrink: string = "";
     strDrink: string = "";
     strDrinkAlternate: string = "";
@@ -53,3 +78,4 @@ export class Drink {
     strCreativeCommonsConfirmed: string = "";
     dateModified: string = "";
 }
+

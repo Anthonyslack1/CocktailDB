@@ -21,25 +21,53 @@
 <div>
 </div>
 <div class="cocktailList-container">
-    <div id="{{drink.idDrink}}" class="card-wrapper" *ngFor="let drink of cocktailList" color="primary"
-        (click)="cardClicked(drink.idDrink)">
+    <div id="{{drink.Id}}" class="card-wrapper" *ngFor="let drink of cocktailList" color="primary"
+        (click)="cardClicked(drink.Id)">
         <mat-card
-            [ngStyle]="{'display': (drink.strDrink.toLowerCase().includes(cocktailFilter.toLowerCase())) ? 'inline-block' : 'none'}">
-            <mat-card-header>
-                <mat-card-title>{{drink.strDrink}}</mat-card-title>
-                <mat-card-subtitle>Id: {{drink.idDrink}}</mat-card-subtitle>
-                <mat-icon *ngIf="drink.idDrink !== selectedDrinkId" class="icon-display">add_circle_outline</mat-icon>
-                <mat-icon *ngIf="drink.idDrink === selectedDrinkId" class="icon-display">remove_circle_outline
-                </mat-icon>
-            </mat-card-header>
-            <img mat-card-image src="{{drink.strDrinkThumb}}" alt="Photo of the Cocktail">
-            <mat-card-content>
-                <div *ngIf="drink.idDrink === selectedDrinkId" class="instructions-container">
-                    <p>
-                        {{drink.strInstructions}}
-                    </p>
-                </div>
-            </mat-card-content>
+            [ngStyle]="{'display': (drink.Name.toLowerCase().includes(cocktailFilter.toLowerCase())) ? 'flex' : 'none'}">
+            <div class="card-header-container">
+                <mat-card-header>
+                    <mat-card-title>{{drink.Name}}</mat-card-title>
+                    <mat-card-subtitle>Id: {{drink.Id}}</mat-card-subtitle>
+                    <mat-icon *ngIf="drink.Id !== selectedDrink.Id" class="icon-display">add_circle_outline</mat-icon>
+                    <mat-icon *ngIf="drink.Id === selectedDrink.Id" class="icon-display">remove_circle_outline</mat-icon>
+                </mat-card-header>
+                <img mat-card-image src="{{drink.DrinkThumbnail}}" alt="Photo of the Cocktail">
+            </div>
+            <div class="card-content-container" *ngIf="drink.Id === selectedDrink.Id">
+                <mat-card-content>
+                    <!-- <div class="content-item">
+                        <h3>Tags:</h3>
+                        <div>
+                            <p>{{drink.strCategory}}</p>
+                        </div>
+                    </div> -->
+                    <div class="content-item">
+                        <h3>Category:</h3>
+                        <div>
+                            <p>{{drink.Category}}</p>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <h3>Glass:</h3>
+                        <div>
+                            <p>{{drink.Glass}}</p>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <h3>Ingredients:</h3>
+                        <div *ngFor="let ingredient of selectedIngredientString">
+                            <p>{{ingredient}}</p>
+                        </div>
+                    </div>
+                    <div class="content-item">
+                        <h3>Instructions:</h3>
+                        <p>
+                            {{drink.InstructionsEN}}
+                        </p>
+                    </div>
+                </mat-card-content>
+            </div>
         </mat-card>
     </div>
 </div>

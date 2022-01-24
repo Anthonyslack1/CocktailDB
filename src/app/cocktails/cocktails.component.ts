@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { filter, map, Observable } from 'rxjs';
-import { Drink, DrinkDTO } from './models/drink';
+import { Drink } from './models/drink';
 import { CocktailsService } from './services/cocktails.service';
 
 @Component({
@@ -12,45 +11,63 @@ import { CocktailsService } from './services/cocktails.service';
 export class CocktailsComponent implements OnInit {
 
   constructor(private cocktailService: CocktailsService) { }
-  
+
   cocktailSearch: FormControl = new FormControl('');
   cocktailFilter: string = "";
   cocktailList: Drink[] = [];
-  selectedDrinkId: string = "";
+  selectedIngredients: string[] = [];
+  selectedIngredientString: string[] = [];
+  selectedDrink: Drink = new Drink();
   alphabetSorted: boolean = true;
+
   ngOnInit(): void {
+    //TODO add alphabetical control
     this.cocktailService.getAllCocktailsByLetter("a")
-    .pipe(map(value => value.drinks))
-    .subscribe(drinks => {
-      this.cocktailList = drinks;
-    });
+      .subscribe(drinks => {
+        this.cocktailList = drinks;
+      });
   }
 
 
   submit() {
     this.cocktailService.getCocktailsByName(this.cocktailSearch.value)
-      .pipe(map(value => value.drinks))
       .subscribe(drinks => {
         this.cocktailList = drinks;
       });
   }
 
   cardClicked(drinkId: string) {
-    if (this.selectedDrinkId === drinkId) {
-      this.selectedDrinkId = "";
+    if (this.selectedDrink.Id === drinkId) {
+      this.selectedDrink = new Drink();
     }
     else {
-      this.selectedDrinkId = this.cocktailList.find(c => c.idDrink === drinkId)?.idDrink || "";
+      this.selectedDrink = this.cocktailList.find(c => c.Id === drinkId) || new Drink();
+      this.mapIngredientString(this.selectedDrink);
+    }
+  }
+
+  mapIngredientString(drink: Drink) {
+    this.selectedIngredientString = [];
+    drink.Ingredients.forEach(ingredient => {
+      let index = drink.Ingredients.indexOf(ingredient)
+      let ingredientString = ingredient + " " + drink.Measurements[index];
+      this.selectedIngredientString.push(ingredientString);
+    });
+  }
+
+  mapTags(drink: Drink) {
+    if (drink.Tags) {
+
     }
   }
 
   sortAlphabetically() {
     this.alphabetSorted = !this.alphabetSorted;
     if (!this.alphabetSorted) {
-    this.cocktailList = this.cocktailList.sort((a,b) => a.strDrink.localeCompare(b.strDrink));
+      this.cocktailList = this.cocktailList.sort((a, b) => a.Name.localeCompare(b.Name));
     }
     else {
-      this.cocktailList = this.cocktailList.sort((a,b) => b.strDrink.localeCompare(a.strDrink));
+      this.cocktailList = this.cocktailList.sort((a, b) => b.Name.localeCompare(a.Name));
     }
   }
 }

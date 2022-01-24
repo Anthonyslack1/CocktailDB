@@ -1,0 +1,21 @@
+<div class="cocktailList-container">
+    <div id="{{ingredient.strIngredient1}}" class="card-wrapper" *ngFor="let ingredient of ingredientList" color="primary"
+        (click)="cardClicked(ingredient)">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{ingredient.strIngredient1}}</mat-card-title>
+                <mat-icon *ngIf="ingredient.strIngredient1.toLocaleLowerCase() !== selectedIngredient.strIngredient.toLocaleLowerCase()" class="icon-display">add_circle_outline</mat-icon>
+                <mat-icon *ngIf="ingredient.strIngredient1.toLocaleLowerCase() === selectedIngredient.strIngredient.toLocaleLowerCase()" class="icon-display">remove_circle_outline
+                </mat-icon>
+            </mat-card-header>
+            <img mat-card-image src="https://thecocktaildb.com/images/ingredients/{{ingredient.strIngredient1}}.png" alt="Photo of the ingredient">
+            <mat-card-content>
+                <div *ngIf="ingredient.strIngredient1.toLocaleLowerCase() == selectedIngredient.strIngredient.toLocaleLowerCase()" class="instructions-container">
+                    <p>
+                        {{selectedIngredient.strDescription}}
+                    </p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
