@@ -1,8 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { map } from "rxjs";
+import { SimpleDrink, SimpleDrinkDTO, SimpleDrinkApiObj } from "src/app/ingredients/models/ingredient";
 import { environment } from '../../../environments/environment';
-import { CategoryApiObj, CategoryDTO, Drink, DrinkAPIObj, DrinkDTO } from "../models/drink";
+import { CategoryDTO, Drink, DrinkDTO } from "../models/drink";
 
 
 @Injectable({
@@ -12,7 +13,7 @@ export class CocktailsService {
     constructor(private http: HttpClient) {}
 
     //TODO The mapping can be condensed or made prettier... API can change
-    getCocktailsByName(searchValue: string) {
+    getAllCocktailsByName(searchValue: string) {
         return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}search.php?s=${searchValue}`)
         .pipe(map(value => {
             return this.mapDrink(value);
@@ -33,13 +34,6 @@ export class CocktailsService {
             }));
     }
 
-    getAllCocktailsByIngredient(searchValue: string) {
-        return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}filter.php?i=${searchValue}`)
-            .pipe(map(value => {
-                return this.mapDrink(value);
-            }));
-    }
-
     getAllCocktailsByCategory(searchValue: string) {
         return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}filter.php?c=${searchValue}`)
             .pipe(map(value => {
@@ -47,12 +41,25 @@ export class CocktailsService {
             }));
     }
 
+    getAllCocktailsByIngredient(searchValue: string) {
+        return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}filter.php?i=${searchValue}`)
+        .pipe(map(value => {
+            return this.mapDrink(value);
+        }));
+    }
     
     getAllCocktailsByGlass(searchValue: string) {
         return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}filter.php?g=${searchValue}`)
             .pipe(map(value => {
                 return this.mapDrink(value);
             }));
+    }
+
+    getRandomCocktail() {
+        return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}random.php`)
+        .pipe(map(value => {
+            return this.mapDrink(value);
+        }));
     }
 
     getAllCategories() {
@@ -92,11 +99,23 @@ export class CocktailsService {
         return result;
     }
 
+    mapSimpleDrink(apiObj: SimpleDrinkDTO) {
+        const result: SimpleDrink[] = [];
+        apiObj.drinks.forEach(drink => {
+            const newDrink = new SimpleDrink();
+            newDrink.Id = drink.idDrink;
+            newDrink.Name = drink.strDrink;
+            newDrink.ImageThumb = drink.strDrinkThumb;
+            result.push(newDrink);
+        });
+        return result;
+    }
+
     mapDrink(value: DrinkDTO) {
         const drinkArray: Drink[] = [];
         if (value !== null && value.drinks !== null) {
             value.drinks.forEach(apiObj => {
-                let newDrink = new Drink();
+                const newDrink = new Drink();
                 newDrink.Id = apiObj.idDrink;
                 newDrink.Name = apiObj.strDrink;
                 newDrink.NameAlt = apiObj.strDrinkAlternate;

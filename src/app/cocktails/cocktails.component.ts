@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
 import { Ingredient } from '../ingredients/models/ingredient';
 import { IngredientsService } from '../ingredients/services/ingredients.service';
 import { CocktailDetailsComponent } from './cocktail-details/cocktail-details.component';
-import { Drink } from './models/drink';
+import { Drink, SearchType } from './models/drink';
 import { CocktailsService } from './services/cocktails.service';
 
 @Component({
@@ -16,13 +18,18 @@ export class CocktailsComponent implements OnInit {
 
   constructor(private cocktailService: CocktailsService,
               private ingredientsService: IngredientsService,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog,
+              private route: ActivatedRoute) {
+                this.alpha = Array.from(Array(26)).map((e, i) => i + 65);
+                this.alphabet = this.alpha.map((x) => String.fromCharCode(x));
+               }
 
-  cocktailSearch: FormControl = new FormControl();
-  ingredientSearch: FormControl = new FormControl();
-  categorySearch: FormControl = new FormControl();
-  
-  lastSearched = "";
+  cocktailSearch: FormControl = new FormControl("", [Validators.required]);
+  ingredientSearch: FormControl = new FormControl("", [Validators.required]);
+  categorySearch: FormControl = new FormControl("", [Validators.required]);
+
+
+  lastSearched: Subject<string> = new Subject<string>();
   currentCategory = "";
   cocktailFilter: string = "";
   cocktailList: Drink[] = [];
@@ -33,13 +40,23 @@ export class CocktailsComponent implements OnInit {
   selectedIngredientString: string[] = [];
   selectedDrink: Drink = new Drink();
   alphabetSorted: boolean = true;
+  alpha: number [] = [];
+  alphabet: string[] = [];
 
   get isResults(): boolean {
     return this.cocktailList.length > 0;
   }
 
+  get SearchType() {
+    return SearchType;
+  }
+
   ngOnInit(): void {
-    //TODO add alphabetical control
+    const routeParams = this.route.snapshot.paramMap;
+    const cocktailIdFromRoute = (routeParams.get('cocktailId'));
+    if (cocktailIdFromRoute) {
+      this.submitSearch(SearchType.Id, cocktailIdFromRoute);
+    }
     this.cocktailService.getAllCocktailsByLetter("a")
       .subscribe(drinks => {
         this.cocktailList = drinks;
@@ -54,51 +71,72 @@ export class CocktailsComponent implements OnInit {
       .subscribe(ingredients => {
         this.ingredientsList = ingredients;
       })
-
-    this.lastSearched = "";
   }
 
 
-  submitNameSearch() {
-    this.lastSearched = `Cocktails containing "${this.cocktailSearch.value}"`
-    this.cocktailService.getCocktailsByName(this.cocktailSearch.value)
-      .subscribe(drinks => {
-        this.cocktailList = drinks;
-      });
-  }
-
-  submitIngredientSearch(ingredient = "") {
-    if (ingredient == "") {
-      ingredient = this.ingredientSearch.value;
+  submitSearch(searchType: SearchType, searchValue: string = "") {
+    let results: Observable<Drink[]> = new Observable<Drink[]>();
+    switch (searchType) {
+      case SearchType.Id: {
+        if (searchValue === "") {
+          searchValue = this.cocktailSearch.value;
+        }
+        results = this.cocktailService.getCocktailsById(searchValue);
+        break;
+      }
+      case SearchType.Name: {
+        if (searchValue === "") {
+          searchValue = this.cocktailSearch.value;
+        }
+        results = this.cocktailService.getAllCocktailsByName(searchValue);
+        this.updateLastSearched(`Cocktails containing "${this.cocktailSearch.value}."`);
+        break;
+      }
+      case SearchType.Ingredient: {
+        if (searchValue === "") {
+          searchValue = this.ingredientSearch.value;
+        }
+        else {
+          searchValue = searchValue.split(' | ')[1]
+        }
+        results = this.cocktailService.getAllCocktailsByIngredient(searchValue);
+        this.updateLastSearched(`Cocktails made with "${searchValue}."`);
+        break;
+      }
+      case SearchType.Category: {
+        if (searchValue === "") {
+          searchValue = this.categorySearch.value;
+        }
+        results = this.cocktailService.getAllCocktailsByCategory(searchValue);
+        this.updateLastSearched(`Drinks in the "${searchValue}" category.`);
+        break;
+      }
+      case SearchType.Glass: {
+        results = this.cocktailService.getAllCocktailsByGlass(searchValue);
+        this.updateLastSearched(`Drinks best served in a "${searchValue}."`);
+        break;
+      }
+      case SearchType.Alphabetical: {
+        results = this.cocktailService.getAllCocktailsByLetter(searchValue);
+        this.updateLastSearched(`Cocktails beginning with "${searchValue}."`);
+        break;
+      }
+      case SearchType.Random: {
+        results = this.cocktailService.getRandomCocktail();
+        this.updateLastSearched(`Here, try this.`);
+        break;
+      }
+      default: {
+        break;
+      }
     }
-    else {
-      ingredient = ingredient.split(' | ')[1]
-    }
-    this.lastSearched = `Cocktails made with "${ingredient}"`;
-    this.cocktailService.getAllCocktailsByIngredient(ingredient)
-      .subscribe(drinks => {
-        this.cocktailList = drinks;
-      });
+    results.subscribe(drinkList => {
+      this.cocktailList = drinkList;
+    })
   }
 
-  submitCategorySearch(category = "") {
-    if (category == "") {
-      category = this.categorySearch.value;
-    }
-    this.lastSearched = `Drinks in the "${category}" category`;
-    this.cocktailService.getAllCocktailsByCategory(category)
-      .subscribe(drinks => {
-        this.cocktailList = drinks;
-      });
-    this.currentCategory = category;
-  }
-
-  submitGlassSearch(glass: string) {
-    this.lastSearched = `Drinks best served in a "${glass}"`;
-    this.cocktailService.getAllCocktailsByGlass(glass)
-    .subscribe(drinks => {
-      this.cocktailList = drinks;
-    });
+  updateLastSearched(text: string) {
+    this.lastSearched.next(text);
   }
 
   cardClicked(drinkId: string) {
@@ -118,36 +156,11 @@ export class CocktailsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data =>{
       if (data) {
-        switch(data.searchType) {
-          case "ingredient": {
-            this.submitIngredientSearch(data.value);
-            break;
-          }
-          case "category": {
-            this.submitCategorySearch(data.value);
-            break;
-          }
-          case "glass": {
-            this.submitGlassSearch(data.value);
-          }
-        }
+        this.submitSearch(data.searchType, data.value);
       }
       this.selectedDrink = new Drink();
     })
 
-  }
-
-  mapIngredientString(drink: Drink) {
-    this.selectedIngredientString = [];
-    drink.Ingredients.forEach(ingredient => {
-      let index = drink.Ingredients.indexOf(ingredient);
-      let measurement = "To Preference";
-      if (drink.Measurements[index] !== undefined) {
-        measurement = drink.Measurements[index];
-      }
-      let ingredientString =  measurement + " | " + ingredient;
-      this.selectedIngredientString.push(ingredientString);
-    });
   }
 
   sortAlphabetically() {

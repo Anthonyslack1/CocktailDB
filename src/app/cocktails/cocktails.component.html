@@ -1,16 +1,16 @@
 <div class="form-container">
     <div class="searches-container">
-        <form (submit)="submitNameSearch()">
+        <form (submit)="submitSearch(SearchType.Name)">
             <div class="search-item">
                 <mat-form-field>
                     <mat-label>Search by Name</mat-label>
-                    <input type="text" matInput [formControl]="cocktailSearch" placeholder="Find New Cocktails!">
+                  <input type="text" matInput [formControl]="cocktailSearch" placeholder="Find New Cocktails!">
                 </mat-form-field>
-                <button type="button" (click)="submitNameSearch()" mat-button>Search Names<mat-icon>local_bar</mat-icon>
+                <button type="button" (click)="submitSearch(SearchType.Name)" mat-button>Search Names<mat-icon>local_bar</mat-icon>
                 </button>
             </div>
         </form>
-        <form (submit)="submitIngredientSearch()">
+        <form (submit)="submitSearch(SearchType.Ingredient)">
             <div class="search-item">
                 <mat-form-field>
                 <mat-label>Search by Ingredient</mat-label>
@@ -18,19 +18,18 @@
                         <mat-option *ngFor="let item of ingredientsList" [value]="item.Name">{{item.Name}}</mat-option>
                     </mat-select>
                 </mat-form-field>  
-                <button type="button" (click)="submitIngredientSearch()" mat-button>Search Ingredients<mat-icon>shopping_cart</mat-icon></button>
+                <button type="button" (click)="submitSearch(SearchType.Ingredient)" mat-button>Search Ingredients<mat-icon>shopping_cart</mat-icon></button>
             </div>
         </form>
-        <form submit="submitCategorySearch()">
+        <form submit="submitSearch(SearchType.Category)">
             <div class="search-item">
                 <mat-form-field>
                     <mat-label>Search by Category</mat-label>
-                    <mat-label>Search by Ingredient</mat-label>
                     <mat-select matNativeControl [formControl]="categorySearch">
                         <mat-option *ngFor="let item of categoryList" [value]="item">{{item}}</mat-option>
                     </mat-select>
                 </mat-form-field>  
-                <button type="button" (click)="submitCategorySearch()" mat-button>Search Categories<mat-icon>subject</mat-icon></button>
+                <button type="button" (click)="submitSearch(SearchType.Category)" mat-button>Search Categories<mat-icon>subject</mat-icon></button>
             </div>
         </form>
     </div>
@@ -45,11 +44,21 @@
             <mat-label>Filter Results</mat-label>
             <input type="text" matInput [(ngModel)]="cocktailFilter">
         </mat-form-field>
+        <button id="feeling-lucky" class="filter-field" type="button" mat-raised-button
+            (click)="submitSearch(SearchType.Random)">
+            Random Cocktail
+            <mat-icon >local_bar</mat-icon>
+        </button>
     </div>
 </div>
 <div class="no-results">
-    <h1>{{lastSearched}}</h1>
+    <h1>{{lastSearched | async}}</h1>
 </div>
+<div class="alphabet-container">
+    <form submit="submitSearch(SearchType.Alphabetical, character)">
+        <button (click)="submitSearch(SearchType.Alphabetical, character)" *ngFor="let character of alphabet" type="button" mat-button>{{character}}</button>
+    </form>
+</div> 
 <div *ngIf="isResults" class="cocktailList-container">
     <div id="{{drink.Id}}" class="card-wrapper" *ngFor="let drink of cocktailList" color="primary"
         (click)="cardClicked(drink.Id)">

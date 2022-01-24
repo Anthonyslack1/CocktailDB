@@ -33,7 +33,7 @@ import { CocktailDetailsComponent } from './cocktail-details/cocktail-details.co
   providers: [
     CocktailsService,
     IngredientsService,
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}
   ],
   declarations: [CocktailsComponent, CocktailDetailsComponent]
 })

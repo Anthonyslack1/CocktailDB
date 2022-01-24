@@ -31,3 +31,19 @@ export class IngredientDetail {
     Alcohol: boolean = true;
     ABV: string = "";
 }
+
+export class SimpleDrinkDTO {
+    drinks: SimpleDrinkApiObj[] = [];
+}
+
+export class SimpleDrinkApiObj {
+    strDrink: string = "";
+    strDrinkThumb: string = "";
+    idDrink: string = "";
+}
+
+export class SimpleDrink {
+    Id: string = "";
+    Name: string = "";
+    ImageThumb: string = "";
+}

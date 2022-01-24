@@ -53,11 +53,19 @@ img {
     display: flex;
     flex-direction: row;
     margin-left: 30px;
-    width: 50%;
 }
 
 .filter-field {
     margin-right: 30px;
+}
+
+.cocktail-container {
+    max-width: 100%;
+}
+
+.cocktail-button {
+    width: 50%;
+    text-align: left;
 }
 
 .mat-dialog-actions {

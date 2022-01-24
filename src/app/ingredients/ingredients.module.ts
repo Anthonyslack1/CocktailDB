@@ -6,13 +6,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {MatCardModule} from '@angular/material/card';
 import { CocktailsService } from '../cocktails/services/cocktails.service';
 import { MatIconModule} from '@angular/material/icon'
 import { IngredientsService } from './services/ingredients.service';
 import { IngredientDetailComponent } from './ingredient-detail/ingredient-detail.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -25,12 +27,13 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatCardModule,
     MatIconModule,
     FormsModule,
+    MatSelectModule,
     HttpClientModule,
     MatDialogModule
   ],
   providers: [
     CocktailsService,
-    IngredientsService
+    IngredientsService,
   ],
   declarations: [IngredientsComponent, IngredientDetailComponent]
 })

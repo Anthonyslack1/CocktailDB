@@ -1,7 +1,7 @@
 <nav>
   <mat-toolbar color="primary">
       <mat-toolbar-row>
-          <mat-icon>local_bar</mat-icon><span>Cocktail DB</span>
+          <button id="site-logo" type="menu" mat-button [routerLink]="'/home'"><span>Cocktail DB </span><mat-icon>local_bar</mat-icon></button>
           <div>
             <button color="accent" type="button" mat-button [routerLink]="'/cocktails'"> Search for Cocktails </button>
             <button color="accent" type="button" mat-button [routerLink]="'/ingredients'"> Search for Ingredients </button>

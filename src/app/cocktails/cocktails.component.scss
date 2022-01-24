@@ -81,7 +81,12 @@
 .no-results {
     margin-left: auto;
     margin-right: auto;
+    margin-top: 25px;
     width: fit-content;
+}
+
+.alphabet-container {
+    margin-top: 25px;
 }
 
 .instructions {
@@ -109,4 +114,8 @@
 
 .show {
     display: flex;
+}
+
+#feeling-lucky {
+    margin-left: auto;
 }

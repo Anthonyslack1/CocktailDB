@@ -21,11 +21,21 @@
                     <p>{{ingredient.Alcohol}}</p>
                 </div>
             </div>
-            <div class="content-item instructions">
+            <div class="content-item">
                 <h3>ABV:</h3>
                 <p>
                     {{ingredient.ABV}}
                 </p>
+            </div>
+            <div class="content-item cocktail-container">
+                <h3>Cocktails Using:</h3>
+                <mat-form-field>
+                    <mat-label>Cocktails Using</mat-label>
+                        <mat-select matNativeControl [formControl]="cocktailSearch">
+                            <mat-option *ngFor="let cocktail of cocktailList" [value]="cocktail.Id">{{cocktail.Name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>  
+                <button type="button" (click)="submitSearch()" mat-button>Search for this Cocktail<mat-icon>local_bar</mat-icon></button>
             </div>
         </div>
     </div>
