@@ -27,7 +27,6 @@
     margin-bottom: 30px;
     min-width: 400px;
     max-width:fit-content;
-    max-height: 280px;
     padding-bottom: 0%;
     box-shadow: 0 1px 2px rgba(0,0,0,0.15);
     transition: all 0.3s ease-in-out;
@@ -56,6 +55,7 @@
 
 .mat-card-header {
     width: 25%;
+    margin-right: 15px;
 }
 
 .mat-card-content {
@@ -63,6 +63,24 @@
 }
 .icon-display {
     transform: scale(1.5);
+}
+
+.ingredient-link {
+    padding-left: 0px!important;
+}
+
+.ingredients-header {
+    margin-bottom: 8px;
+}
+
+.no-results {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.instructions {
+    max-width: 25%;
 }
 
 .content-item {

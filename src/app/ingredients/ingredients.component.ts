@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { map } from 'rxjs';
 import { Ingredient, IngredientDetail } from './models/ingredient';
 import { IngredientsService } from './services/ingredients.service';
 
@@ -17,19 +16,18 @@ export class IngredientsComponent implements OnInit {
 
   ngOnInit(): void {
     this.ingredientService.getAllIngredients()
-      .pipe(map(value => value.drinks))
       .subscribe(ingredients => {
         this.ingredientList = ingredients;
       });
   }
 
   cardClicked(ingredientName: Ingredient) {
-    if (this.selectedIngredient.strIngredient.toLocaleLowerCase() === ingredientName.strIngredient1.toLocaleLowerCase()) {
+    if (this.selectedIngredient.Name.toLocaleLowerCase() === ingredientName.Name.toLocaleLowerCase()) {
       this.selectedIngredient = new IngredientDetail();
     }
     else {
-      this.ingredientService.getIngredientDetails(ingredientName.strIngredient1).subscribe(detail => {
-        this.selectedIngredient = detail.ingredients[0];
+      this.ingredientService.getIngredientDetails(ingredientName.Name).subscribe(detail => {
+        this.selectedIngredient = detail[0];
       });
     }
   }

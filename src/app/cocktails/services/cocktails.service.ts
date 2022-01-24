@@ -19,8 +19,22 @@ export class CocktailsService {
         }));
     }
 
+    getCocktailsById(searchValue: string) {
+        return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}lookup.php?i=${searchValue}`)
+        .pipe(map(value => {
+            return this.mapDrink(value);
+        }));
+    }
+
     getAllCocktailsByLetter(searchValue: string) {
         return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}search.php?f=${searchValue}`)
+            .pipe(map(value => {
+                return this.mapDrink(value);
+            }));
+    }
+
+    getAllCocktailsByIngredient(searchValue: string) {
+        return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}filter.php?i=${searchValue}`)
             .pipe(map(value => {
                 return this.mapDrink(value);
             }));
@@ -50,7 +64,7 @@ export class CocktailsService {
 
     mapDrink(value: DrinkDTO) {
         let drinkArray: Drink[] = [];
-        if (value.drinks) {
+        if (value !== null && value.drinks !== null) {
             value.drinks.forEach(apiObj => {
                 let newDrink = new Drink();
                 newDrink.Id = apiObj.idDrink;

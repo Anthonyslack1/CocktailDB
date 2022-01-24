@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {MatCardModule} from '@angular/material/card';
 import { CocktailsService } from './services/cocktails.service';
 import { MatIconModule} from '@angular/material/icon'
+import { IngredientsService } from '../ingredients/services/ingredients.service';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { MatIconModule} from '@angular/material/icon'
     HttpClientModule
   ],
   providers: [
-    CocktailsService
+    CocktailsService,
+    IngredientsService
   ],
   declarations: [CocktailsComponent]
 })
