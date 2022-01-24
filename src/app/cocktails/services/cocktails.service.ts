@@ -50,6 +50,7 @@ export class CocktailsService {
 
     mapDrink(value: DrinkDTO) {
         let drinkArray: Drink[] = [];
+        if (value.drinks) {
             value.drinks.forEach(apiObj => {
                 let newDrink = new Drink();
                 newDrink.Id = apiObj.idDrink;
@@ -77,6 +78,7 @@ export class CocktailsService {
                 newDrink.DateModified = apiObj.dateModified;
                 drinkArray.push(newDrink);
             })
+        }
         return drinkArray;
     }
 }
