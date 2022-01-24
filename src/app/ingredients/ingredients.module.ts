@@ -11,6 +11,8 @@ import {MatCardModule} from '@angular/material/card';
 import { CocktailsService } from '../cocktails/services/cocktails.service';
 import { MatIconModule} from '@angular/material/icon'
 import { IngredientsService } from './services/ingredients.service';
+import { IngredientDetailComponent } from './ingredient-detail/ingredient-detail.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -23,12 +25,13 @@ import { IngredientsService } from './services/ingredients.service';
     MatCardModule,
     MatIconModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule
   ],
   providers: [
     CocktailsService,
     IngredientsService
   ],
-  declarations: [IngredientsComponent]
+  declarations: [IngredientsComponent, IngredientDetailComponent]
 })
 export class IngredientsModule { }

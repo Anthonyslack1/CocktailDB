@@ -37,7 +37,9 @@
     <div class="filters-container">
         <button id="alphabetical-sort" class="filter-field" type="button" mat-raised-button
             (click)="sortAlphabetically()">
-            A-Z
+            A-Z 
+            <mat-icon *ngIf="this.alphabetSorted">keyboard_arrow_up</mat-icon>
+            <mat-icon *ngIf="!this.alphabetSorted">keyboard_arrow_down</mat-icon>
         </button>
         <mat-form-field class="filter-field">
             <mat-label>Filter Results</mat-label>
@@ -45,7 +47,9 @@
         </mat-form-field>
     </div>
 </div>
-
+<div class="no-results">
+    <h1>{{lastSearched}}</h1>
+</div>
 <div *ngIf="isResults" class="cocktailList-container">
     <div id="{{drink.Id}}" class="card-wrapper" *ngFor="let drink of cocktailList" color="primary"
         (click)="cardClicked(drink.Id)">

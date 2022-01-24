@@ -1,22 +1,38 @@
 .cocktailList-container {
     display: inline-flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
 }
 .form-container {
     display: block;
+}
+
+.searches-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
 }
 .filters-container {
     display: inline-flex;
     width: 100%;
 }
 
+.card-wrapper {
+    display: inline-flex;
+    overflow: hidden;
+}
+
+.card-header-container {
+    display: flex;
+}
+
 .mat-card {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
     margin: 15px;
     margin-bottom: 30px;
-    max-width: 300px;
+    min-width: 400px;
+    max-width:fit-content;
     padding-bottom: 0%;
     box-shadow: 0 1px 2px rgba(0,0,0,0.15);
     transition: all 0.3s ease-in-out;
@@ -31,15 +47,56 @@
 }
 
 .icon-container {
-    display: flex;
+    display: inline-flex;
     width: 100%;
     justify-content: end;
     margin-bottom: 15px;
 }
 
+.mat-card-image {
+    margin-left: 30px;
+    width: 280px;
+    min-width: 280px;
+}
+
+.mat-card-header-text {
+    margin: 0px;
+}
+
+.mat-card-content {
+    display: flex;
+}
 .icon-display {
     transform: scale(1.5);
+}
+
+.button-link {
+    padding-left: 0px!important;
+}
+
+.button-header {
+    margin-bottom: 8px;
+}
+
+.no-results {
     margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.instructions {
+    max-width: 25%;
+}
+
+.content-item {
+    width: max-content;
+    margin-left: 15px;
+}
+
+.card-content-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 30px;
 }
 
 .filter-field {
@@ -51,5 +108,5 @@
 }
 
 .show {
-    display: inline-block;
+    display: flex;
 }

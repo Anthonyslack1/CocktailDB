@@ -1,0 +1,35 @@
+
+<div class="parent-container">
+    <div class="header-container">
+        <div class="header">
+            <h2 mat-dialog-title>{{ingredient.Name}}</h2>
+            <mat-card-subtitle>Id: {{ingredient.Id}}</mat-card-subtitle>
+        </div>
+        <img src="https://thecocktaildb.com/images/ingredients/{{ingredient.Name}}.png" alt="Photo of the Cocktail">
+    </div>
+    <div class="content-container">
+        <div mat-dialog-content>
+            <div class="content-item">
+                <h3>Type:</h3>
+                <div>
+                    <p>{{ingredient.Type}}</p>
+                </div>
+            </div>
+            <div class="content-item">
+                <h3>Alcohol:</h3>
+                <div>
+                    <p>{{ingredient.Alcohol}}</p>
+                </div>
+            </div>
+            <div class="content-item instructions">
+                <h3>ABV:</h3>
+                <p>
+                    {{ingredient.ABV}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button class="close-button" mat-raised-button color="primary" (click)="onExitClick()">Close</button>
+</div>

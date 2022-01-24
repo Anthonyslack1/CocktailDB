@@ -47,6 +47,14 @@ export class CocktailsService {
             }));
     }
 
+    
+    getAllCocktailsByGlass(searchValue: string) {
+        return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}filter.php?g=${searchValue}`)
+            .pipe(map(value => {
+                return this.mapDrink(value);
+            }));
+    }
+
     getAllCategories() {
         return this.http.get<CategoryDTO>(`${environment.cocktailDBBaseUrl}list.php?c=list`)
         .pipe(map(value => {
@@ -55,7 +63,7 @@ export class CocktailsService {
     }
 
     mapIngredients(apiObj: any) {
-        let result: string[] = [];
+        const result: string[] = [];
         for (let i = 1; i <= 15; i++) {
             let ingredientValue = apiObj[`strIngredient${i}`];
             if (ingredientValue) {
@@ -66,7 +74,7 @@ export class CocktailsService {
     }
 
     mapMeasurements(apiObj: any) {
-        let result: string[] = [];
+        const result: string[] = [];
         for (let i = 1; i <= 15; i++) {
             let measurementValue = apiObj[`strMeasure${i}`];
             if (measurementValue) {
@@ -77,7 +85,7 @@ export class CocktailsService {
     }
 
     mapCategories(apiObj: CategoryDTO) {
-        let result: string[] = [];
+        const result: string[] = [];
         apiObj.drinks.forEach(category => {
             result.push(category.strCategory)
         });
@@ -85,7 +93,7 @@ export class CocktailsService {
     }
 
     mapDrink(value: DrinkDTO) {
-        let drinkArray: Drink[] = [];
+        const drinkArray: Drink[] = [];
         if (value !== null && value.drinks !== null) {
             value.drinks.forEach(apiObj => {
                 let newDrink = new Drink();

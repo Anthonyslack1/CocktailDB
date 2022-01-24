@@ -6,7 +6,9 @@
             <mat-card-subtitle>Id: {{drink.Id}}</mat-card-subtitle>
         </div>
         <img src="{{drink.DrinkThumbnail}}" alt="Photo of the Cocktail">
-        <div *ngFor="let tag of drink.Tags">{{tag}}</div>
+        <div *ngIf="drink.Tags.length > 0">Tags:
+            <button type="button" mat-button *ngFor="let tag of drink.Tags">#{{tag}}</button>
+        </div>
     </div>
     <div class="content-container">
         <div mat-dialog-content>
@@ -17,9 +19,9 @@
                 </div>
             </div>
             <div class="content-item">
-                <h3>Glass:</h3>
+                <h3 class="button-header">Glass:</h3>
                 <div>
-                    <p>{{drink.Glass}}</p>
+                    <button class="button-link" type="button" mat-button (click)="search('glass', drink.Glass)">{{drink.Glass}}</button>
                 </div>
             </div>
             <div class="content-item">

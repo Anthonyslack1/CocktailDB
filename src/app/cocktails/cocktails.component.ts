@@ -22,6 +22,7 @@ export class CocktailsComponent implements OnInit {
   ingredientSearch: FormControl = new FormControl();
   categorySearch: FormControl = new FormControl();
   
+  lastSearched = "";
   currentCategory = "";
   cocktailFilter: string = "";
   cocktailList: Drink[] = [];
@@ -47,16 +48,19 @@ export class CocktailsComponent implements OnInit {
     this.cocktailService.getAllCategories()
       .subscribe(categories => {
         this.categoryList = categories;
-    })
+      })
 
     this.ingredientsService.getAllIngredients()
       .subscribe(ingredients => {
         this.ingredientsList = ingredients;
       })
+
+    this.lastSearched = "";
   }
 
 
   submitNameSearch() {
+    this.lastSearched = `Cocktails containing "${this.cocktailSearch.value}"`
     this.cocktailService.getCocktailsByName(this.cocktailSearch.value)
       .subscribe(drinks => {
         this.cocktailList = drinks;
@@ -70,6 +74,7 @@ export class CocktailsComponent implements OnInit {
     else {
       ingredient = ingredient.split(' | ')[1]
     }
+    this.lastSearched = `Cocktails made with "${ingredient}"`;
     this.cocktailService.getAllCocktailsByIngredient(ingredient)
       .subscribe(drinks => {
         this.cocktailList = drinks;
@@ -80,11 +85,20 @@ export class CocktailsComponent implements OnInit {
     if (category == "") {
       category = this.categorySearch.value;
     }
+    this.lastSearched = `Drinks in the "${category}" category`;
     this.cocktailService.getAllCocktailsByCategory(category)
       .subscribe(drinks => {
         this.cocktailList = drinks;
       });
     this.currentCategory = category;
+  }
+
+  submitGlassSearch(glass: string) {
+    this.lastSearched = `Drinks best served in a "${glass}"`;
+    this.cocktailService.getAllCocktailsByGlass(glass)
+    .subscribe(drinks => {
+      this.cocktailList = drinks;
+    });
   }
 
   cardClicked(drinkId: string) {
@@ -104,11 +118,18 @@ export class CocktailsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data =>{
       if (data) {
-        if (data.searchType === "ingredient") {
-          this.submitIngredientSearch(data.value);
-        }
-        else if (data.searchType === "category") {
-          this.submitCategorySearch(data.value);
+        switch(data.searchType) {
+          case "ingredient": {
+            this.submitIngredientSearch(data.value);
+            break;
+          }
+          case "category": {
+            this.submitCategorySearch(data.value);
+            break;
+          }
+          case "glass": {
+            this.submitGlassSearch(data.value);
+          }
         }
       }
       this.selectedDrink = new Drink();
