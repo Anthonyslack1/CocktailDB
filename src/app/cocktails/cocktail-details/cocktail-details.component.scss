@@ -1,0 +1,72 @@
+.parent-container {
+    position: relative;
+    display: inline-flex;
+    margin: 15px;
+    margin-bottom: 30px;
+    min-width: 400px;
+    max-width:95%;
+    padding-bottom: 0%;
+}
+
+.icon-container {
+    display: inline-flex;
+    width: 100%;
+    justify-content: end;
+    margin-bottom: 15px;
+}
+
+img {
+    width: 400px;
+    min-width: 400px;
+}
+
+.header {
+    width: 25%;
+    margin-right: 15px;
+}
+
+.mat-dialog-content {
+    display: flex;
+    overflow: hidden;
+}
+.icon-display {
+    transform: scale(1.5);
+}
+
+.button-link {
+    padding-left: 0px!important;
+}
+
+.button-header {
+    margin-bottom: 8px;
+}
+
+.instructions {
+    max-width: 25%;
+}
+
+.content-item {
+    width: max-content;
+    margin-left: 15px;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 30px;
+    width: 50%;
+}
+
+.filter-field {
+    margin-right: 30px;
+}
+
+.mat-dialog-actions {
+    width: 100%;
+    justify-content: center;
+}
+
+.close-button {
+    width: 25%;
+    margin-bottom: 0px;
+}

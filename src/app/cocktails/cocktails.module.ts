@@ -11,6 +11,9 @@ import {MatCardModule} from '@angular/material/card';
 import { CocktailsService } from './services/cocktails.service';
 import { MatIconModule} from '@angular/material/icon'
 import { IngredientsService } from '../ingredients/services/ingredients.service';
+import { MatSelectModule } from '@angular/material/select';
+import {MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
+import { CocktailDetailsComponent } from './cocktail-details/cocktail-details.component';
 
 @NgModule({
   imports: [
@@ -22,13 +25,16 @@ import { IngredientsService } from '../ingredients/services/ingredients.service'
     MatTableModule,
     MatCardModule,
     MatIconModule,
+    MatSelectModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule
   ],
   providers: [
     CocktailsService,
-    IngredientsService
+    IngredientsService,
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
   ],
-  declarations: [CocktailsComponent]
+  declarations: [CocktailsComponent, CocktailDetailsComponent]
 })
 export class CocktailsModule { }

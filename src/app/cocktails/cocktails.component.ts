@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Ingredient } from '../ingredients/models/ingredient';
 import { IngredientsService } from '../ingredients/services/ingredients.service';
+import { CocktailDetailsComponent } from './cocktail-details/cocktail-details.component';
 import { Drink } from './models/drink';
 import { CocktailsService } from './services/cocktails.service';
 
@@ -13,17 +15,21 @@ import { CocktailsService } from './services/cocktails.service';
 export class CocktailsComponent implements OnInit {
 
   constructor(private cocktailService: CocktailsService,
-              private ingredientsService: IngredientsService) { }
+              private ingredientsService: IngredientsService,
+              public dialog: MatDialog) { }
 
-  cocktailSearch: FormControl = new FormControl('');
-  ingredientSearch: FormControl = new FormControl('');
-  categorySearch: FormControl = new FormControl('');
+  cocktailSearch: FormControl = new FormControl();
+  ingredientSearch: FormControl = new FormControl();
+  categorySearch: FormControl = new FormControl();
   
+  currentCategory = "";
   cocktailFilter: string = "";
   cocktailList: Drink[] = [];
+  categoryList: String[] = [];
+  tagList: String[] = [];
+  ingredientsList: Ingredient[] = [];
   selectedIngredients: string[] = [];
   selectedIngredientString: string[] = [];
-  ingredientsList: Ingredient[] = [];
   selectedDrink: Drink = new Drink();
   alphabetSorted: boolean = true;
 
@@ -37,6 +43,11 @@ export class CocktailsComponent implements OnInit {
       .subscribe(drinks => {
         this.cocktailList = drinks;
       });
+
+    this.cocktailService.getAllCategories()
+      .subscribe(categories => {
+        this.categoryList = categories;
+    })
 
     this.ingredientsService.getAllIngredients()
       .subscribe(ingredients => {
@@ -54,7 +65,7 @@ export class CocktailsComponent implements OnInit {
 
   submitIngredientSearch(ingredient = "") {
     if (ingredient == "") {
-      this.ingredientSearch.value
+      ingredient = this.ingredientSearch.value;
     }
     else {
       ingredient = ingredient.split(' | ')[1]
@@ -65,11 +76,15 @@ export class CocktailsComponent implements OnInit {
       });
   }
 
-  submitCategorySearch() {
-    this.cocktailService.getCocktailsByName(this.cocktailSearch.value)
+  submitCategorySearch(category = "") {
+    if (category == "") {
+      category = this.categorySearch.value;
+    }
+    this.cocktailService.getAllCocktailsByCategory(category)
       .subscribe(drinks => {
         this.cocktailList = drinks;
       });
+    this.currentCategory = category;
   }
 
   cardClicked(drinkId: string) {
@@ -78,16 +93,27 @@ export class CocktailsComponent implements OnInit {
     }
     else {
       this.selectedDrink = this.cocktailList.find(c => c.Id === drinkId) || new Drink();
-      if (this.selectedDrink.Ingredients.length > 0) {
-        this.mapIngredientString(this.selectedDrink);
-      }
-      else {
-        this.cocktailService.getCocktailsById(this.selectedDrink.Id).subscribe(response => {
-          this.selectedDrink = response[0];
-          this.mapIngredientString(this.selectedDrink);
-        })
-      }
     }
+
+    const dialogRef = this.dialog.open(CocktailDetailsComponent, {
+      width: '60%',
+      height: '70%',
+      data: { selectedDrink: this.selectedDrink }
+    });
+
+
+    dialogRef.afterClosed().subscribe(data =>{
+      if (data) {
+        if (data.searchType === "ingredient") {
+          this.submitIngredientSearch(data.value);
+        }
+        else if (data.searchType === "category") {
+          this.submitCategorySearch(data.value);
+        }
+      }
+      this.selectedDrink = new Drink();
+    })
+
   }
 
   mapIngredientString(drink: Drink) {
@@ -101,12 +127,6 @@ export class CocktailsComponent implements OnInit {
       let ingredientString =  measurement + " | " + ingredient;
       this.selectedIngredientString.push(ingredientString);
     });
-  }
-
-  mapTags(drink: Drink) {
-    if (drink.Tags) {
-
-    }
   }
 
   sortAlphabetically() {

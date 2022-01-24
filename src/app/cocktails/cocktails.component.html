@@ -1,20 +1,39 @@
 <div class="form-container">
-    <mat-form-field>
-        <mat-label>Search by Name</mat-label>
-        <input type="text" matInput [formControl]="cocktailSearch" placeholder="Find New Cocktails!">
-    </mat-form-field>
-    <button type="button" (click)="submitNameSearch()" mat-button>Submit</button>
-    <mat-form-field>
-        <mat-label>Search by Ingredient</mat-label>
-        <input type="text" matInput [formControl]="ingredientSearch" placeholder="Find New Cocktails!">
-    </mat-form-field>
-    <button type="button" (click)="submitIngredientSearch()" mat-button>Submit</button>
-    <mat-form-field>
-        <mat-label>Search by Category</mat-label>
-        <input type="text" matInput [formControl]="categorySearch" placeholder="Find New Cocktails!">
-    </mat-form-field>
-    <button type="button" (click)="submitCategorySearch()" mat-button>Submit</button>
-
+    <div class="searches-container">
+        <form (submit)="submitNameSearch()">
+            <div class="search-item">
+                <mat-form-field>
+                    <mat-label>Search by Name</mat-label>
+                    <input type="text" matInput [formControl]="cocktailSearch" placeholder="Find New Cocktails!">
+                </mat-form-field>
+                <button type="button" (click)="submitNameSearch()" mat-button>Search Names<mat-icon>local_bar</mat-icon>
+                </button>
+            </div>
+        </form>
+        <form (submit)="submitIngredientSearch()">
+            <div class="search-item">
+                <mat-form-field>
+                <mat-label>Search by Ingredient</mat-label>
+                    <mat-select matNativeControl [formControl]="ingredientSearch">
+                        <mat-option *ngFor="let item of ingredientsList" [value]="item.Name">{{item.Name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>  
+                <button type="button" (click)="submitIngredientSearch()" mat-button>Search Ingredients<mat-icon>shopping_cart</mat-icon></button>
+            </div>
+        </form>
+        <form submit="submitCategorySearch()">
+            <div class="search-item">
+                <mat-form-field>
+                    <mat-label>Search by Category</mat-label>
+                    <mat-label>Search by Ingredient</mat-label>
+                    <mat-select matNativeControl [formControl]="categorySearch">
+                        <mat-option *ngFor="let item of categoryList" [value]="item">{{item}}</mat-option>
+                    </mat-select>
+                </mat-form-field>  
+                <button type="button" (click)="submitCategorySearch()" mat-button>Search Categories<mat-icon>subject</mat-icon></button>
+            </div>
+        </form>
+    </div>
     <div class="filters-container">
         <button id="alphabetical-sort" class="filter-field" type="button" mat-raised-button
             (click)="sortAlphabetically()">
@@ -26,8 +45,7 @@
         </mat-form-field>
     </div>
 </div>
-<div>
-</div>
+
 <div *ngIf="isResults" class="cocktailList-container">
     <div id="{{drink.Id}}" class="card-wrapper" *ngFor="let drink of cocktailList" color="primary"
         (click)="cardClicked(drink.Id)">
@@ -37,44 +55,9 @@
                 <mat-card-header>
                     <mat-card-title>{{drink.Name}}</mat-card-title>
                     <mat-card-subtitle>Id: {{drink.Id}}</mat-card-subtitle>
-                    <mat-icon *ngIf="drink.Id !== selectedDrink.Id" class="icon-display">add_circle_outline</mat-icon>
-                    <mat-icon *ngIf="drink.Id === selectedDrink.Id" class="icon-display">remove_circle_outline</mat-icon>
+                    <mat-icon class="icon-display">add_circle_outline</mat-icon>
                 </mat-card-header>
                 <img mat-card-image src="{{drink.DrinkThumbnail}}" alt="Photo of the Cocktail">
-            </div>
-            <div class="card-content-container" *ngIf="drink.Id === selectedDrink.Id">
-                <mat-card-content>
-                    <!-- <div class="content-item">
-                        <h3>Tags:</h3>
-                        <div>
-                            <p>{{drink.strCategory}}</p>
-                        </div>
-                    </div> -->
-                    <div class="content-item">
-                        <h3>Category:</h3>
-                        <div>
-                            <p>{{selectedDrink.Category}}</p>
-                        </div>
-                    </div>
-                    <div class="content-item">
-                        <h3>Glass:</h3>
-                        <div>
-                            <p>{{selectedDrink.Glass}}</p>
-                        </div>
-                    </div>
-                    <div class="content-item">
-                        <h3 class="ingredients-header">Ingredients:</h3>
-                        <div *ngFor="let ingredient of selectedIngredientString">
-                            <button class="ingredient-link" type="button" mat-button (click)="submitIngredientSearch(ingredient)">{{ingredient}}</button>
-                        </div>
-                    </div>
-                    <div class="content-item instructions">
-                        <h3>Instructions:</h3>
-                        <p>
-                            {{selectedDrink.InstructionsEN}}
-                        </p>
-                    </div>
-                </mat-card-content>
             </div>
         </mat-card>
     </div>

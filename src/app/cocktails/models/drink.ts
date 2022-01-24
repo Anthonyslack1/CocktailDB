@@ -2,7 +2,6 @@ export class DrinkDTO {
     drinks: DrinkAPIObj[] = [];
 }
 
-
 export class Drink {
     Id: string = "";
     Name: string = "";
@@ -79,3 +78,10 @@ export class DrinkAPIObj {
     dateModified: string = "";
 }
 
+export class CategoryDTO {
+    drinks: CategoryApiObj[] = [];
+}
+
+export class CategoryApiObj {
+    strCategory: string = "";
+}

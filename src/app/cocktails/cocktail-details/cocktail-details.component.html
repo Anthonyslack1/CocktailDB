@@ -1,0 +1,42 @@
+
+<div class="parent-container">
+    <div class="header-container">
+        <div class="header">
+            <h2 mat-dialog-title>{{drink.Name}}</h2>
+            <mat-card-subtitle>Id: {{drink.Id}}</mat-card-subtitle>
+        </div>
+        <img src="{{drink.DrinkThumbnail}}" alt="Photo of the Cocktail">
+        <div *ngFor="let tag of drink.Tags">{{tag}}</div>
+    </div>
+    <div class="content-container">
+        <div mat-dialog-content>
+            <div class="content-item">
+                <h3 class="button-header">Category:</h3>
+                <div>
+                    <button class="button-link" type="button" mat-button (click)="search('category', drink.Category)">{{drink.Category}}</button>
+                </div>
+            </div>
+            <div class="content-item">
+                <h3>Glass:</h3>
+                <div>
+                    <p>{{drink.Glass}}</p>
+                </div>
+            </div>
+            <div class="content-item">
+                <h3 class="button-header">Ingredients:</h3>
+                <div *ngFor="let ingredient of selectedIngredientString">
+                    <button class="button-link" type="button" mat-button (click)="search('ingredient', ingredient)">{{ingredient}}</button>
+                </div>
+            </div>
+            <div class="content-item instructions">
+                <h3>Instructions:</h3>
+                <p>
+                    {{drink.InstructionsEN}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button class="close-button" mat-raised-button color="primary" (click)="onExitClick()">Close</button>
+</div>

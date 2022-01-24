@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map } from "rxjs";
+import { map, Observable } from "rxjs";
 import { environment } from '../../../environments/environment';
-import { Drink, DrinkAPIObj, DrinkDTO } from "../models/drink";
+import { CategoryApiObj, CategoryDTO, Drink, DrinkAPIObj, DrinkDTO } from "../models/drink";
 
 
 @Injectable({
@@ -40,6 +40,20 @@ export class CocktailsService {
             }));
     }
 
+    getAllCocktailsByCategory(searchValue: string) {
+        return this.http.get<DrinkDTO>(`${environment.cocktailDBBaseUrl}filter.php?c=${searchValue}`)
+            .pipe(map(value => {
+                return this.mapDrink(value);
+            }));
+    }
+
+    getAllCategories() {
+        return this.http.get<CategoryDTO>(`${environment.cocktailDBBaseUrl}list.php?c=list`)
+        .pipe(map(value => {
+            return this.mapCategories(value);
+        }));
+    }
+
     mapIngredients(apiObj: any) {
         let result: string[] = [];
         for (let i = 1; i <= 15; i++) {
@@ -62,6 +76,14 @@ export class CocktailsService {
         return result;
     }
 
+    mapCategories(apiObj: CategoryDTO) {
+        let result: string[] = [];
+        apiObj.drinks.forEach(category => {
+            result.push(category.strCategory)
+        });
+        return result;
+    }
+
     mapDrink(value: DrinkDTO) {
         let drinkArray: Drink[] = [];
         if (value !== null && value.drinks !== null) {
@@ -70,13 +92,13 @@ export class CocktailsService {
                 newDrink.Id = apiObj.idDrink;
                 newDrink.Name = apiObj.strDrink;
                 newDrink.NameAlt = apiObj.strDrinkAlternate;
-                if (newDrink.Tags.length) {
+                if (apiObj.strTags && apiObj.strTags.length > 0) {
                     newDrink.Tags = apiObj.strTags.split(',');
                 }
                 newDrink.Video = apiObj.strVideo;
                 newDrink.Category = apiObj.strCategory;
                 newDrink.IBA = apiObj.strIBA;
-                newDrink.Alcoholic = apiObj.strAlcoholic === "Alcoholic" ? true : false;
+                newDrink.Alcoholic = apiObj.strAlcoholic === "Alcoholic";
                 newDrink.Glass = apiObj.strGlass;
                 newDrink.InstructionsEN = apiObj.strInstructions;
                 newDrink.InstructionsES = apiObj.strInstructionsES;
@@ -88,7 +110,7 @@ export class CocktailsService {
                 newDrink.Measurements = this.mapMeasurements(apiObj);
                 newDrink.ImageSource = apiObj.strImageSource;
                 newDrink.ImageAttribution = apiObj.strImageAttribution;
-                newDrink.CreativeCommonsConfirmed = apiObj.strCreativeCommonsConfirmed === "Yes" ? true : false;
+                newDrink.CreativeCommonsConfirmed = apiObj.strCreativeCommonsConfirmed === "Yes";
                 newDrink.DateModified = apiObj.dateModified;
                 drinkArray.push(newDrink);
             })

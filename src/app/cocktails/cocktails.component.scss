@@ -1,10 +1,16 @@
 .cocktailList-container {
     display: inline-flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
 }
 .form-container {
     display: block;
+}
+
+.searches-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
 }
 .filters-container {
     display: inline-flex;
@@ -65,11 +71,11 @@
     transform: scale(1.5);
 }
 
-.ingredient-link {
+.button-link {
     padding-left: 0px!important;
 }
 
-.ingredients-header {
+.button-header {
     margin-bottom: 8px;
 }
 
