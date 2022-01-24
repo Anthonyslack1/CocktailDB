@@ -57,10 +57,9 @@ export class CocktailsComponent implements OnInit {
     if (cocktailIdFromRoute) {
       this.submitSearch(SearchType.Id, cocktailIdFromRoute);
     }
-    this.cocktailService.getAllCocktailsByLetter("a")
-      .subscribe(drinks => {
-        this.cocktailList = drinks;
-      });
+    else {
+      this.submitSearch(SearchType.Alphabetical, this.alphabet[0]);
+    }
 
     this.cocktailService.getAllCategories()
       .subscribe(categories => {
